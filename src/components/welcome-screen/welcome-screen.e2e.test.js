@@ -2,8 +2,7 @@ import React from 'react';
 import Enzyme, {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import WelcomeScreen from './welcome-screen.jsx';
-
-const ERRORS_COUNT = 3;
+import {ERRORS_COUNT} from '../../mocks/test-data';
 
 Enzyme.configure({
   adapter: new Adapter(),
