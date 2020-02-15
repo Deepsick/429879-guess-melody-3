@@ -13,11 +13,20 @@ class QuestionGenre extends PureComponent {
     this._handleInputChange = this._handleInputChange.bind(this);
   }
 
-  _handleInputChange(value, index) {
+  _handleInputChange(index) {
+    return (evt) => {
+      const value = evt.target.checked;
+      this.setState((prevState) => ({
+        answers: [...prevState.answers.slice(0, index), value, ...prevState.answers.slice(index + 1)],
+      }));
+    };
+  }
 
-    this.setState((prevState) => ({
-      answers: [...prevState.answers.slice(0, index), value, ...prevState.answers.slice(index + 1)],
-    }));
+  _handleFormSubmit(question, onAnswer) {
+    return (evt) => {
+      evt.preventDefault();
+      onAnswer(question, this.state.answers);
+    };
   }
 
   render() {
@@ -52,10 +61,7 @@ class QuestionGenre extends PureComponent {
           <h2 className="game__title">Выберите {genre} треки</h2>
           <form
             className="game__tracks"
-            onSubmit={(evt) => {
-              evt.preventDefault();
-              onAnswer(question, this.state.answers);
-            }}
+            onSubmit={this._handleFormSubmit(question, onAnswer)}
           >
             {answers.map((answer, i) => {
               const {src} = answer;
@@ -74,10 +80,7 @@ class QuestionGenre extends PureComponent {
                       value={`answer-${i}`}
                       checked={userAnswers[i]}
                       id={`answer-${i}`}
-                      onChange={(evt) => {
-                        const value = evt.target.checked;
-                        this._handleInputChange(value, i);
-                      }}
+                      onChange={this._handleInputChange(i)}
                     />
                     <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
                   </div>

@@ -5,6 +5,11 @@ import {GameType} from '../../const';
 const QuestionArtist = ({onAnswer, question}) => {
   const {answers, song} = question;
 
+  const handleInputChange = (artistQuestion, answer, onAnswerCallback) => (evt) => {
+    evt.preventDefault();
+    onAnswerCallback(artistQuestion, answer);
+  };
+
   return (
     <section className="game game--artist">
       <header className="game__header">
@@ -47,10 +52,7 @@ const QuestionArtist = ({onAnswer, question}) => {
                   name="answer"
                   value={`artist-${i}`}
                   id={`answer-${i}`}
-                  onChange={(evt) => {
-                    evt.preventDefault();
-                    onAnswer(question, answer);
-                  }}
+                  onChange={handleInputChange(question, answer, onAnswer)}
                 />
                 <label className="artist__name" htmlFor={`answer-${i}`}>
                   <img className="artist__picture" src={picture} alt={artist} />
