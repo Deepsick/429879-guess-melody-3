@@ -11,6 +11,7 @@ class QuestionGenre extends PureComponent {
     };
 
     this._handleInputChange = this._handleInputChange.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   _handleInputChange(index) {
@@ -22,15 +23,14 @@ class QuestionGenre extends PureComponent {
     };
   }
 
-  _handleFormSubmit(question, onAnswer) {
-    return (evt) => {
-      evt.preventDefault();
-      onAnswer(question, this.state.answers);
-    };
+  _handleFormSubmit(evt) {
+    evt.preventDefault();
+    const {onAnswer, question} = this.props;
+    onAnswer(question, this.state.answers);
   }
 
   render() {
-    const {onAnswer, question} = this.props;
+    const {question} = this.props;
     const {answers: userAnswers} = this.state;
     const {
       answers,
@@ -61,7 +61,7 @@ class QuestionGenre extends PureComponent {
           <h2 className="game__title">Выберите {genre} треки</h2>
           <form
             className="game__tracks"
-            onSubmit={this._handleFormSubmit(question, onAnswer)}
+            onSubmit={this._handleFormSubmit}
           >
             {answers.map((answer, i) => {
               const {src} = answer;

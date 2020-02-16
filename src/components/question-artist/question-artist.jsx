@@ -5,9 +5,9 @@ import {GameType} from '../../const';
 const QuestionArtist = ({onAnswer, question}) => {
   const {answers, song} = question;
 
-  const handleInputChange = (artistQuestion, answer, onAnswerCallback) => (evt) => {
+  const handleInputChange = (answer) => (evt) => {
     evt.preventDefault();
-    onAnswerCallback(artistQuestion, answer);
+    onAnswer(question, answer);
   };
 
   return (
@@ -52,7 +52,7 @@ const QuestionArtist = ({onAnswer, question}) => {
                   name="answer"
                   value={`artist-${i}`}
                   id={`answer-${i}`}
-                  onChange={handleInputChange(question, answer, onAnswer)}
+                  onChange={handleInputChange(answer)}
                 />
                 <label className="artist__name" htmlFor={`answer-${i}`}>
                   <img className="artist__picture" src={picture} alt={artist} />
