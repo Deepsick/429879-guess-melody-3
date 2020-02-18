@@ -1,15 +1,13 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import WelcomeScreen from './welcome-screen.jsx';
-
-const ERRORS_COUNT = 3;
-const onWelcomeButtonClick = () => {};
+import {HANDLE_WELCOME_BUTTON_CLICK, ERRORS_COUNT} from '../../mocks/test-data';
 
 it(`Should render WelcomeScreen component correctly`, () => {
   const node = renderer.create(
       <WelcomeScreen
         errorsCount={ERRORS_COUNT}
-        onWelcomeButtonClick={onWelcomeButtonClick}
+        onWelcomeButtonClick={HANDLE_WELCOME_BUTTON_CLICK}
       />
   ).toJSON();
 
