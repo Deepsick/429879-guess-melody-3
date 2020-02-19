@@ -3,6 +3,7 @@ import {AVATAR_URL} from '../const';
 export const ERRORS_COUNT = 3;
 export const HANDLE_WELCOME_BUTTON_CLICK = () => {};
 export const HANDLE_ANSWER_INPUT_CHANGE = () => {};
+export const RENDER_PLAYER = () => {};
 export const QUESTIONS = [
   {
     type: `genre`,
@@ -38,3 +39,11 @@ export const QUESTIONS = [
     }],
   },
 ];
+
+export const AUDIO_PLAYER_PROPS = {
+  src: `https://upload.wikimedia.org/wikipedia/commons/4/4e/BWV_543-fugue.ogg`,
+  isPlaying: true,
+  onPlayButtonClick: () => {},
+};
+
+

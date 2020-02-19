@@ -4,8 +4,12 @@ import PropTypes from 'prop-types';
 import WelcomeScreen from '../welcome-screen/welcome-screen.jsx';
 import QuestionArtist from '../question-artist/question-artist.jsx';
 import QuestionGenre from '../question-genre/question-genre.jsx';
+import GameScreen from '../game-screen/game-screen.jsx';
 import {GameType, Path, WELCOME_SCREEN_STEP} from '../../const';
+import withAudioPlayer from '../../hocs/with-audio-player/with-audio-player.js';
 
+const GenreQuestionScreenWrapped = withAudioPlayer(QuestionGenre);
+const ArtistQuestionScreenWrapped = withAudioPlayer(QuestionArtist);
 class App extends PureComponent {
   constructor(props) {
     super(props);
@@ -48,17 +52,21 @@ class App extends PureComponent {
       switch (question.type) {
         case GameType.ARTIST:
           return (
-            <QuestionArtist
-              question={questions[1]}
-              onAnswer={this._handleAnswerInputChange}
-            />
+            <GameScreen type={question.type}>
+              <ArtistQuestionScreenWrapped
+                question={questions[1]}
+                onAnswer={this._handleAnswerInputChange}
+              />
+            </GameScreen>
           );
         case GameType.GENRE:
           return (
-            <QuestionGenre
-              question={questions[0]}
-              onAnswer={this._handleAnswerInputChange}
-            />
+            <GameScreen type={question.type} >
+              <GenreQuestionScreenWrapped
+                question={questions[0]}
+                onAnswer={this._handleAnswerInputChange}
+              />
+            </GameScreen>
           );
       }
     }
@@ -76,15 +84,15 @@ class App extends PureComponent {
             {this._renderGameScreen()}
           </Route>
           <Route exact path={Path.ARTIST}>
-            <QuestionArtist
+            <ArtistQuestionScreenWrapped
               question={questions[1]}
-              onAnswer={() => {}}
+              onAnswer={this._handleAnswerInputChange}
             />
           </Route>
           <Route exact path={Path.GENRE}>
-            <QuestionGenre
+            <GenreQuestionScreenWrapped
               question={questions[0]}
-              onAnswer={() => {}}
+              onAnswer={this._handleAnswerInputChange}
             />
           </Route>
         </Switch>
