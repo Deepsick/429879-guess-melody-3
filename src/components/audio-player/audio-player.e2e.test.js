@@ -20,14 +20,16 @@ it(`Should call callback on answer input change`, () => {
         isPlaying={isPlaying}
         onPlayButtonClick={onButtonClick}
       />);
+  window.HTMLMediaElement.prototype.play = () => {};
+  window.HTMLMediaElement.prototype.pause = () => {};
 
   const trackButton = audioPlayer.find(`.track__button`);
 
-  trackButton.simulate(`click`);
-  console.log(audioPlayer.state());
-  expect(audioPlayer.state().isPlaying).toBe(!isPlaying);
-  trackButton.simulate(`click`);
-  expect(audioPlayer.state().isPlaying).to.equal(!!isPlaying);
+  expect(audioPlayer.find(`.track__button--pause`)).toHaveLength(1);
 
-  expect(onButtonClick).toHaveBeenCalledTimes(2);
+  audioPlayer.setState({isLoading: false});
+  trackButton.simulate(`click`);
+  expect(audioPlayer.find(`.track__button--play`)).toHaveLength(1);
+
+  expect(onButtonClick).toHaveBeenCalledTimes(1);
 });

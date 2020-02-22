@@ -22,9 +22,8 @@ const withAudioPlayer = (Component) => {
       };
     }
 
-    _renderPlayer(src, id) {
-      const {activePlayerId} = this.state;
-      return (
+    _renderPlayer(activePlayerId) {
+      return (src, id) => (
         <AudioPlayer
           src={src}
           isPlaying={id === activePlayerId}
@@ -34,9 +33,10 @@ const withAudioPlayer = (Component) => {
     }
 
     render() {
+      const {activePlayerId} = this.state;
       return <Component
         {...this.props}
-        renderPlayer={this._renderPlayer}
+        renderPlayer={this._renderPlayer(activePlayerId)}
       />;
     }
   }
