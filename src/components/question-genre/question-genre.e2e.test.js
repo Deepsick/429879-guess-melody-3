@@ -2,7 +2,7 @@ import React from 'react';
 import Enzyme, {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import QuestionGenre from './question-genre.jsx';
-import {QUESTIONS} from '../../mocks/test-data';
+import {QUESTIONS, RENDER_PLAYER} from '../../mocks/test-data';
 
 Enzyme.configure({
   adapter: new Adapter(),
@@ -16,6 +16,7 @@ it(`Should call callback on answer input change`, () => {
       <QuestionGenre
         onAnswer={onAnswer}
         question={QUESTIONS[0]}
+        renderPlayer={RENDER_PLAYER}
       />
   );
 
