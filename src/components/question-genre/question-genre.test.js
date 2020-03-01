@@ -9,6 +9,8 @@ it(`Should render QuestionGenre component correctly`, () => {
         onAnswer={HANDLE_ANSWER_INPUT_CHANGE}
         question={QUESTIONS[0]}
         renderPlayer={RENDER_PLAYER}
+        onChange={() => {}}
+        userAnswers={[false, false, true, false]}
       />, {
         createNodeMock: () => {
           return {};

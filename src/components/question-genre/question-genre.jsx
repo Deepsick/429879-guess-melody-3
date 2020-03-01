@@ -1,69 +1,39 @@
-import React, {Component} from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
+import QuestionGenreItem from "../question-genre-item/question-genre-item.jsx";
 import {GameType} from '../../const';
 
-class QuestionGenre extends Component {
-  constructor(props) {
-    super(props);
+const handleFormSubmit = (onAnswer) => (evt) => {
+  evt.preventDefault();
+  onAnswer();
+};
 
-    this.state = {
-      answers: [false, false, false, false],
-    };
+const QuestionGenre = ({question, onAnswer, onChange, renderPlayer, userAnswers}) => {
+  const {answers, genre} = question;
 
-    this._handleInputChange = this._handleInputChange.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
-  }
+  return (
+    <section className="game__screen">
+      <h2 className="game__title">Выберите {genre} треки</h2>
+      <form
+        className="game__tracks"
+        onSubmit={handleFormSubmit(onAnswer)}
+      >
+        {answers.map((answer, i) => (
+          <QuestionGenreItem
+            answer={answer}
+            id={i}
+            key={`${i}-${answer.src}`}
+            onChange={onChange}
+            renderPlayer={renderPlayer}
+            userAnswer={userAnswers[i]}
+          />
+        ))}
 
-  _handleInputChange(index) {
-    return (evt) => {
-      const value = evt.target.checked;
-      this.setState((prevState) => ({
-        answers: [...prevState.answers.slice(0, index), value, ...prevState.answers.slice(index + 1)],
-      }));
-    };
-  }
-
-  _handleFormSubmit(evt) {
-    evt.preventDefault();
-    const {onAnswer, question} = this.props;
-    onAnswer(question, this.state.answers);
-  }
-
-  render() {
-    const {question, renderPlayer} = this.props;
-    const {answers: userAnswers} = this.state;
-    const {
-      answers,
-      genre,
-    } = question;
-
-    return (
-      <section className="game__screen">
-        <h2 className="game__title">Выберите {genre} треки</h2>
-        <form
-          className="game__tracks"
-          onSubmit={this._handleFormSubmit}
-        >
-          {answers.map((answer, i) => (
-            <div key={`${i}-${answer.src}`} className="track">
-              {renderPlayer(answer.src, i)}
-              <div className="game__answer">
-                <input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${i}`}
-                  id={`answer-${i}`}
-                  checked={userAnswers[i]}
-                  onChange={this._handleInputChange(i)}
-                />
-                <label className="game__check" htmlFor={`answer-${i}`}>Отметить</label>
-              </div>
-            </div>
-          ))}
-
-          <button className="game__submit button" type="submit">Ответить</button>
-        </form>
-      </section>
-    );
-  }
-}
+        <button className="game__submit button" type="submit">Ответить</button>
+      </form>
+    </section>
+  );
+};
 
 QuestionGenre.propTypes = {
   onAnswer: PropTypes.func.isRequired,
@@ -76,6 +46,8 @@ QuestionGenre.propTypes = {
     })).isRequired,
   }).isRequired,
   renderPlayer: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  userAnswers: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
 
-export default QuestionGenre;
+export default memo(QuestionGenre);

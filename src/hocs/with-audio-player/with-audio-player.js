@@ -1,49 +1,95 @@
-import React, {PureComponent} from 'react';
-import AudioPlayer from "../../components/audio-player/audio-player.jsx";
+
+import React, {createRef, PureComponent} from "react";
+import PropTypes from "prop-types";
 
 const withAudioPlayer = (Component) => {
-  class WithActivePlayer extends PureComponent {
+  class WithAudioPlayer extends PureComponent {
     constructor(props) {
       super(props);
 
-      this.state = {
-        activePlayerId: 0,
-      };
+      this._audioRef = createRef();
 
-      this._renderPlayer = this._renderPlayer.bind(this);
-      this._handlePlayButtonClick = this._handlePlayButtonClick.bind(this);
+      this.state = {
+        progress: 0,
+        isLoading: true,
+        isPlaying: props.isPlaying,
+      };
     }
 
-    _handlePlayButtonClick(activePlayerId, id) {
-      return () => {
+    componentDidMount() {
+      const {src} = this.props;
+      const audio = this._audioRef.current;
+
+      audio.src = src;
+
+      audio.oncanplaythrough = () => this.setState({
+        isLoading: false,
+      });
+
+      audio.onplay = () => {
         this.setState({
-          activePlayerId: activePlayerId === id ? -1 : id
+          isPlaying: true,
         });
       };
+
+      audio.onpause = () => this.setState({
+        isPlaying: false,
+      });
+
+      audio.ontimeupdate = () => this.setState({
+        progress: Math.floor(audio.currentTime),
+      });
     }
 
-    _renderPlayer(activePlayerId) {
-      return (src, id) => (
-        <AudioPlayer
-          src={src}
-          isPlaying={id === activePlayerId}
-          onPlayButtonClick={this._handlePlayButtonClick(activePlayerId, id)}
-        />
-      );
+    componentDidUpdate() {
+      const audio = this._audioRef.current;
+
+      if (this.state.isPlaying) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    componentWillUnmount() {
+      const audio = this._audioRef.current;
+
+      audio.oncanplaythrough = null;
+      audio.onplay = null;
+      audio.onpause = null;
+      audio.ontimeupdate = null;
+      audio.src = ``;
     }
 
     render() {
-      const {activePlayerId} = this.state;
-      return <Component
-        {...this.props}
-        renderPlayer={this._renderPlayer(activePlayerId)}
-      />;
+      const {isLoading, isPlaying} = this.state;
+      const {onPlayButtonClick} = this.props;
+
+      return (
+        <Component
+          {...this.props}
+          isLoading={isLoading}
+          isPlaying={isPlaying}
+          onPlayButtonClick={() => {
+            this.setState({isPlaying: !isPlaying});
+            onPlayButtonClick();
+          }}
+        >
+          <audio
+            ref={this._audioRef}
+          />
+        </Component>
+      );
     }
   }
 
-  WithActivePlayer.propTypes = {};
+  WithAudioPlayer.propTypes = {
+    isPlaying: PropTypes.bool.isRequired,
+    onPlayButtonClick: PropTypes.func.isRequired,
+    src: PropTypes.string.isRequired,
+  };
 
-  return WithActivePlayer;
+  return WithAudioPlayer;
 };
 
 export default withAudioPlayer;

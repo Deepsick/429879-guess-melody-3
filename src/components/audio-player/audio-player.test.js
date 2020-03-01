@@ -10,7 +10,10 @@ it(`Should render AudioPlayer component correctly`, () => {
         src={src}
         isPlaying={isPlaying}
         onPlayButtonClick={onPlayButtonClick}
-      />, {
+        isLoading={true}
+      >
+        <audio />
+      </AudioPlayer>, {
         createNodeMock: () => {
           return {};
         }

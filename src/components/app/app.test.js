@@ -23,6 +23,8 @@ describe(`Render App correctly`, () => {
               handleUserAnswer={() => {}}
               handleWelcomeButtonClick={() => {}}
               step={WELCOME_SCREEN_STEP}
+              resetGame={() => {}}
+              mistakes={Error.INCREMENT}
             />
           </Provider>
       )
@@ -45,6 +47,8 @@ describe(`Render App correctly`, () => {
               handleUserAnswer={() => {}}
               handleWelcomeButtonClick={() => {}}
               step={0}
+              resetGame={() => {}}
+              mistakes={Error.INCREMENT}
             />
           </Provider>, {
             createNodeMock: () => {
@@ -70,6 +74,8 @@ describe(`Render App correctly`, () => {
               handleUserAnswer={() => {}}
               handleWelcomeButtonClick={() => {}}
               step={1}
+              resetGame={() => {}}
+              mistakes={Error.INCREMENT}
             />
           </Provider>, {
             createNodeMock: () => {

@@ -68,7 +68,7 @@ exports[`Should render QuestionGenre component correctly 1`] = `
         className="game__answer"
       >
         <input
-          checked={false}
+          checked={true}
           className="game__input visually-hidden"
           id="answer-2"
           name="answer"
