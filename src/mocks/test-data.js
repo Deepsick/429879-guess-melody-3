@@ -46,4 +46,7 @@ export const AUDIO_PLAYER_PROPS = {
   onPlayButtonClick: () => {},
 };
 
-
+export const ANSWER = {
+  src: `https://upload.wikimedia.org/wikipedia/commons/4/4e/BWV_543-fugue.ogg`,
+  genre: `rock`,
+};

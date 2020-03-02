@@ -7,27 +7,51 @@ import WelcomeScreen from '../welcome-screen/welcome-screen.jsx';
 import QuestionArtist from '../question-artist/question-artist.jsx';
 import QuestionGenre from '../question-genre/question-genre.jsx';
 import GameScreen from '../game-screen/game-screen.jsx';
+import GameOverScreen from "../game-over-screen/game-over-screen.jsx";
+import WinScreen from "../win-screen/win-screen.jsx";
 import {GameType, Path, WELCOME_SCREEN_STEP} from '../../const';
-import withAudioPlayer from '../../hocs/with-audio-player/with-audio-player.js';
+import withActivePlayer from "../../hocs/with-active-player/with-active-player.js";
+import withUserAnswer from "../../hocs/with-user-answer/with-user-answer.js";
 
-const GenreQuestionScreenWrapped = withAudioPlayer(QuestionGenre);
-const ArtistQuestionScreenWrapped = withAudioPlayer(QuestionArtist);
+const GenreQuestionScreenWrapped = withActivePlayer(withUserAnswer(QuestionGenre));
+const ArtistQuestionScreenWrapped = withActivePlayer(QuestionArtist);
+
 class App extends PureComponent {
   _renderGameScreen() {
     const {
       maxMistakes,
+      mistakes,
       step,
       questions,
       handleUserAnswer,
       handleWelcomeButtonClick,
+      resetGame,
     } = this.props;
     const question = questions[step];
 
-    if (step === WELCOME_SCREEN_STEP || step >= questions.length) {
+    if (step === WELCOME_SCREEN_STEP) {
       return (
         <WelcomeScreen
           errorsCount={maxMistakes}
           onWelcomeButtonClick={handleWelcomeButtonClick}
+        />
+      );
+    }
+
+    if (mistakes >= maxMistakes) {
+      return (
+        <GameOverScreen
+          onReplayButtonClick={resetGame}
+        />
+      );
+    }
+
+    if (step >= questions.length) {
+      return (
+        <WinScreen
+          questionsCount={questions.length}
+          mistakesCount={mistakes}
+          onReplayButtonClick={resetGame}
         />
       );
     }
@@ -87,9 +111,11 @@ class App extends PureComponent {
 
 App.propTypes = {
   maxMistakes: PropTypes.number.isRequired,
+  mistakes: PropTypes.number.isRequired,
   questions: PropTypes.array.isRequired,
   handleUserAnswer: PropTypes.func.isRequired,
   handleWelcomeButtonClick: PropTypes.func.isRequired,
+  resetGame: PropTypes.func.isRequired,
   step: PropTypes.number.isRequired,
 };
 
@@ -97,6 +123,7 @@ const mapStateToProps = (state) => ({
   step: state.step,
   maxMistakes: state.maxMistakes,
   questions: state.questions,
+  mistakes: state.mistakes,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -106,6 +133,9 @@ const mapDispatchToProps = (dispatch) => ({
   handleUserAnswer(question, answer) {
     dispatch(ActionCreator.incrementMistake(question, answer));
     dispatch(ActionCreator.incrementStep());
+  },
+  resetGame() {
+    dispatch(ActionCreator.resetGame());
   },
 });
 
