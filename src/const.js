@@ -16,4 +16,15 @@ export const Error = {
   INCREMENT: 1,
 };
 export const WELCOME_SCREEN_STEP = -1;
+export const Api = {
+  TIMEOUT: 5000,
+  BASE_URL: `https://htmlacademy-react-3.appspot.com/guess-melody`,
+};
+
+export const ReducerName = {
+  DATA: `DATA`,
+  GAME: `GAME`,
+  USER: `USER`,
+};
+
 

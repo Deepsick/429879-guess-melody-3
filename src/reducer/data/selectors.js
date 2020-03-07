@@ -1,0 +1,26 @@
+import {createSelector} from 'reselect';
+import {ReducerName} from '../../const';
+
+
+export const getQuestions = (state) => {
+  return state[ReducerName.DATA].questions;
+};
+
+const randomFilter = () => {
+  return Math.random() > 0.5;
+};
+
+export const getArtistQuestions = createSelector(
+    getQuestions,
+    randomFilter,
+    (resultOne, resultTwo) => {
+      return resultOne.filter((question) => resultTwo && question.type === `artist`);
+    }
+);
+
+export const getGenreQuestions = createSelector(
+    getQuestions,
+    (questions) => {
+      return questions.filter((question) => question.type === `genre`);
+    }
+);

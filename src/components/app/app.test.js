@@ -4,14 +4,16 @@ import {Provider} from "react-redux";
 import configureStore from 'redux-mock-store';
 import {App} from './app.jsx';
 import {QUESTIONS} from '../../mocks/test-data';
-import {Error, WELCOME_SCREEN_STEP} from '../../const';
+import {Error, WELCOME_SCREEN_STEP, ReducerName} from '../../const';
 
 const mockStore = configureStore([]);
 
 describe(`Render App correctly`, () => {
   it(`Render WelcomeScreen correctly`, () => {
     const store = mockStore({
-      mistakes: Error.START,
+      [ReducerName.GAME]: {
+        mistakes: Error.START,
+      },
     });
 
     const tree = renderer
@@ -35,7 +37,9 @@ describe(`Render App correctly`, () => {
 
   it(`Render GenreQuestionScreen correctly`, () => {
     const store = mockStore({
-      mistakes: Error.MAX,
+      [ReducerName.GAME]: {
+        mistakes: Error.MAX,
+      },
     });
 
     const tree = renderer
@@ -62,7 +66,9 @@ describe(`Render App correctly`, () => {
 
   it(`Render ArtistQuestionScreen`, () => {
     const store = mockStore({
-      mistakes: Error.MAX,
+      [ReducerName.GAME]: {
+        mistakes: Error.MAX,
+      },
     });
 
     const tree = renderer

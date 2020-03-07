@@ -1,15 +1,14 @@
-import {extend} from './utils.js';
-import {GameType, WELCOME_SCREEN_STEP, Error} from './const.js';
-import questions from './mocks/questions.js';
+import {extend} from '../../utils.js';
+import {GameType} from '../../const.js';
 
 const initialState = {
-  mistakes: Error.START,
-  maxMistakes: Error.MAX,
-  step: WELCOME_SCREEN_STEP,
-  questions,
+  mistakes: 0,
+  maxMistakes: 3,
+  step: -1,
 };
 
 const ActionType = {
+  GO_TO_WELCOME: `GO_TO_WELCOME`,
   INCREMENT_MISTAKES: `INCREMENT_MISTAKES`,
   INCREMENT_STEP: `INCREMENT_STEP`,
   RESET: `RESET`,
@@ -28,7 +27,7 @@ const isGenreAnswerCorrect = (question, userAnswer) => {
 const ActionCreator = {
   incrementStep: () => ({
     type: ActionType.INCREMENT_STEP,
-    payload: Error.INCREMENT,
+    payload: 1,
   }),
 
   incrementMistake: (question, userAnswer) => {
@@ -45,13 +44,20 @@ const ActionCreator = {
 
     return {
       type: ActionType.INCREMENT_MISTAKES,
-      payload: answerIsCorrect ? Error.START : Error.INCREMENT,
+      payload: answerIsCorrect ? 0 : 1,
     };
   },
 
   resetGame: () => {
     return {
       type: ActionType.RESET,
+      payload: null,
+    };
+  },
+
+  goToWelcome: () => {
+    return {
+      type: ActionType.GO_TO_WELCOME,
       payload: null,
     };
   },
@@ -71,7 +77,12 @@ const reducer = (state = initialState, action) => {
 
     case ActionType.RESET:
       return extend(initialState, {
-        step: Error.START,
+        step: 0,
+      });
+
+    case ActionType.GO_TO_WELCOME:
+      return extend(initialState, {
+        step: -1,
       });
   }
 
@@ -79,4 +90,4 @@ const reducer = (state = initialState, action) => {
 };
 
 
-export {reducer, ActionType, ActionCreator, initialState};
+export {reducer, ActionType, ActionCreator};

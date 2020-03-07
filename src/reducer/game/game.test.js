@@ -1,35 +1,35 @@
-import {reducer, ActionCreator, ActionType, initialState} from './reducer.js';
-import {QUESTIONS} from './mocks/test-data';
+import {reducer, ActionCreator, ActionType} from './game.js';
+
 
 it(`Reducer without additional parameters should return initial state`, () => {
-  expect(reducer(undefined, {})).toEqual(initialState);
+  expect(reducer(void 0, {})).toEqual({
+    step: -1,
+    mistakes: 0,
+    maxMistakes: 3,
+  });
 });
 
 it(`Reducer should increment current step by a given value`, () => {
   expect(reducer({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   }, {
     type: ActionType.INCREMENT_STEP,
     payload: 1,
   })).toEqual({
     step: 0,
     mistakes: 0,
-    questions: QUESTIONS,
   });
 
   expect(reducer({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   }, {
     type: ActionType.INCREMENT_STEP,
     payload: 0,
   })).toEqual({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   });
 });
 
@@ -37,27 +37,23 @@ it(`Reducer should increment number of mistakes by a given value`, () => {
   expect(reducer({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   }, {
     type: ActionType.INCREMENT_MISTAKES,
     payload: 1,
   })).toEqual({
     step: -1,
     mistakes: 1,
-    questions: QUESTIONS,
   });
 
   expect(reducer({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   }, {
     type: ActionType.INCREMENT_MISTAKES,
     payload: 0,
   })).toEqual({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   });
 });
 
@@ -65,7 +61,6 @@ it(`Reducer should return default`, () => {
   expect(reducer({
     step: 5,
     mistakes: 1,
-    questions: QUESTIONS,
   }, {
     type: ActionType.RESET,
     payload: null,
@@ -73,13 +68,11 @@ it(`Reducer should return default`, () => {
     step: 0,
     mistakes: 0,
     maxMistakes: 3,
-    questions: QUESTIONS,
   });
 
   expect(reducer({
     step: 0,
     mistakes: 0,
-    questions: QUESTIONS,
   }, {
     type: ActionType.RESET,
     payload: null,
@@ -87,13 +80,11 @@ it(`Reducer should return default`, () => {
     step: 0,
     mistakes: 0,
     maxMistakes: 3,
-    questions: QUESTIONS,
   });
 
   expect(reducer({
     step: -1,
     mistakes: 0,
-    questions: QUESTIONS,
   }, {
     type: ActionType.RESET,
     payload: null,
@@ -101,9 +92,47 @@ it(`Reducer should return default`, () => {
     step: 0,
     mistakes: 0,
     maxMistakes: 3,
-    questions: QUESTIONS,
   });
 });
+
+it(`Reducer should return step -1`, () => {
+  expect(reducer({
+    step: 5,
+    mistakes: 1,
+  }, {
+    type: ActionType.GO_TO_WELCOME,
+    payload: null,
+  })).toEqual({
+    step: -1,
+    mistakes: 0,
+    maxMistakes: 3,
+  });
+
+  expect(reducer({
+    step: 0,
+    mistakes: 0,
+  }, {
+    type: ActionType.GO_TO_WELCOME,
+    payload: null,
+  })).toEqual({
+    step: -1,
+    mistakes: 0,
+    maxMistakes: 3,
+  });
+
+  expect(reducer({
+    step: -1,
+    mistakes: 0,
+  }, {
+    type: ActionType.GO_TO_WELCOME,
+    payload: null,
+  })).toEqual({
+    step: -1,
+    mistakes: 0,
+    maxMistakes: 3,
+  });
+});
+
 
 describe(`Action creators work correctly`, () => {
   it(`Action creator for incrementing step returns correct action`, () => {
@@ -223,6 +252,14 @@ describe(`Action creators work correctly`, () => {
     expect(ActionCreator.resetGame())
       .toEqual({
         type: ActionType.RESET,
+        payload: null,
+      });
+  });
+
+  it(`Action creator for go to welcome returns action with null payload`, () => {
+    expect(ActionCreator.goToWelcome())
+      .toEqual({
+        type: ActionType.GO_TO_WELCOME,
         payload: null,
       });
   });
